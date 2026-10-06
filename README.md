@@ -4,6 +4,7 @@
 
 ### The Modern DevSecOps & Web Security Auditor
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-securify--wyvc.onrender.com-00ff66?style=flat-square&logo=render)](https://securify-wyvc.onrender.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7+-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19.0-cyan?style=flat-square&logo=react)](https://react.dev/)
@@ -15,6 +16,10 @@
 
 <p align="center">
   A high-speed, comprehensive web application security analysis suite. Inspect HTTP security headers, analyze live SSL/TLS encryption certificates, test DNS email spoofing defenses (SPF & DMARC), probe sensitive server ports, and generate automated server hardening configurations.
+</p>
+
+<p align="center">
+  <a href="https://securify-wyvc.onrender.com"><strong>🚀 Open Live Application → https://securify-wyvc.onrender.com</strong></a>
 </p>
 
 </div>
