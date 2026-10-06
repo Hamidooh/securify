@@ -18,19 +18,19 @@
 </p>
 
 <p align="center">
-  <a href="https://securify-wyvc.onrender.com"><strong>🚀 Launch Live Application</strong></a> •
-  <a href="#-architecture-overview"><strong>🏗️ Architecture</strong></a> •
+  <a href="https://securify-wyvc.onrender.com"><strong> Launch Live Application</strong></a> •
+  <a href="#-architecture-overview"><strong> Architecture</strong></a> •
   <a href="#-rest-api-reference"><strong>📡 REST API</strong></a> •
-  <a href="#-quick-start"><strong>⚡ Quick Start</strong></a> •
-  <a href="#-docker-deployment"><strong>🐳 Docker</strong></a> •
-  <a href="#-contributing"><strong>🤝 Contributing</strong></a>
+  <a href="#-quick-start"><strong> Quick Start</strong></a> •
+  <a href="#-docker-deployment"><strong> Docker</strong></a> •
+  <a href="#-contributing"><strong> Contributing</strong></a>
 </p>
 
 </div>
 
 ---
 
-## ⚡ Terminal Audit Preview
+##  Terminal Audit Preview
 
 ```bash
 audit@securify:~$ scan github.com
@@ -45,9 +45,9 @@ audit@securify:~$ scan github.com
 
 ---
 
-## 🌟 Core Modules & Capabilities
+##  Core Modules & Capabilities
 
-### 1. 🔒 HTTP Security Headers Auditor
+### 1.  HTTP Security Headers Auditor
 Inspects, parses, and evaluates critical defensive HTTP response headers against OWASP guidelines:
 * **`Content-Security-Policy` (CSP)**: Validates script execution origins and frame-ancestors to prevent Cross-Site Scripting (XSS) and data injection.
 * **`Strict-Transport-Security` (HSTS)**: Evaluates enforcement duration (`max-age`), subdomain coverage, and HSTS preload eligibility.
@@ -57,7 +57,7 @@ Inspects, parses, and evaluates critical defensive HTTP response headers against
 * **`Permissions-Policy`**: Audits restriction of invasive browser APIs (camera, microphone, geolocation).
 * **Information Disclosure Detection**: Identifies server leakages via `Server` and `X-Powered-By` headers.
 
-### 2. 📜 Live SSL / TLS Certificate Inspector
+### 2.  Live SSL / TLS Certificate Inspector
 Direct raw socket TLS handshake (`node:tls`) inspection without browser caching:
 * **Validity Timeline**: Exact validity window, issue date, expiration countdown, and renewal urgency flags.
 * **Cryptographic Strength**: Protocol version (`TLSv1.2`, `TLSv1.3`), cipher suite (`AES-256-GCM`, `CHACHA20-POLY1305`), and key bit length.
@@ -65,20 +65,20 @@ Direct raw socket TLS handshake (`node:tls`) inspection without browser caching:
 * **Subject Alternative Names (SANs)**: Comprehensive extraction of all multi-domain hostnames covered.
 * **Fingerprint Telemetry**: Complete SHA-256 fingerprint and serial number verification.
 
-### 3. 📧 DNS & Phishing Defense Engine
+### 3.  DNS & Phishing Defense Engine
 Performs live DNS record lookups (`node:dns/promises`) to assess email security:
 * **SPF (`v=spf1`)**: Audits authorized outbound mail server policies to prevent domain forgery.
 * **DMARC (`v=DMARC1`)**: Validates domain-level enforcement policies (`p=reject`, `p=quarantine`, `p=none`) and abuse telemetry addresses (`rua`).
 * **CAA Records**: Ensures Certification Authority Authorization restricts unauthorized certificate issuance.
 * **Routing Telemetry**: Resolves dual-stack IPv4 (`A`) and IPv6 (`AAAA`) addresses and Mail Exchanger (`MX`) priorities.
 
-### 4. 📡 Network Port & Service Exposure Matrix
+### 4.  Network Port & Service Exposure Matrix
 Rapid multi-threaded socket probing (`node:net`) across sensitive service ports:
 * **Standard Web**: `80` (HTTP), `443` (HTTPS), `8080` (HTTP-Alt), `8443` (HTTPS-Alt).
 * **Remote Management**: `22` (SSH), `21` (FTP).
 * **Internal Databases (Critical Risks)**: `3306` (MySQL), `5432` (PostgreSQL), `6379` (Redis), `27017` (MongoDB).
 
-### 5. 🛠️ Automated Hardening Config Generator
+### 5.  Automated Hardening Config Generator
 Converts detected vulnerabilities into instant, copyable production configurations:
 * **Nginx** (`nginx.conf` or virtual host)
 * **Apache** (`.htaccess` with `mod_headers`)
@@ -86,7 +86,7 @@ Converts detected vulnerabilities into instant, copyable production configuratio
 * **Vercel** (`vercel.json`)
 * **Express.js** (`helmet` middleware configuration)
 
-### 6. 📋 OWASP Top 10 Compliance Checklist
+### 6.  OWASP Top 10 Compliance Checklist
 Interactive audit workflow tracking controls across **A01:2021 Broken Access Control** through **A10:2021 Server-Side Request Forgery (SSRF)**.
 
 ---
@@ -131,7 +131,7 @@ flowchart TD
 
 ---
 
-## 📊 Security Grading Criteria
+##  Security Grading Criteria
 
 | Grade | Score Range | Health Status | Primary Criteria |
 | :---: | :---: | :---: | :--- |
@@ -218,7 +218,7 @@ GET /api/health
 
 ---
 
-## ⚡ Quick Start (Local Development)
+##  Quick Start (Local Development)
 
 ### Prerequisites
 * **Node.js** >= 18.0.0 (Node 20+ or 22+ recommended)
@@ -240,7 +240,7 @@ Open **[http://localhost:5174](http://localhost:5174)** in your browser.
 
 ---
 
-## 🐳 Docker Deployment
+##  Docker Deployment
 
 Securify includes a lightweight, multi-stage production Dockerfile (`node:20-alpine`):
 
@@ -257,7 +257,7 @@ docker run -d -p 3002:3002 --name securify-app securify:latest
 
 ---
 
-## 📦 Project Scripts
+##  Project Scripts
 
 | Command | Description |
 | :--- | :--- |
@@ -271,18 +271,18 @@ docker run -d -p 3002:3002 --name securify-app securify:latest
 
 ---
 
-## 🧩 Modular System Architecture
+##  Modular System Architecture
 
 Securify is architectured as a decoupled, high-performance security auditing suite:
 
-* **🎨 Presentation Tier**: Interactive developer dashboard powered by React 19, TypeScript, and Tailwind CSS. Features real-time SVG grading gauge telemetry, tabbed diagnostic grids, and copy-ready automated server remediation generators.
-* **⚡ Security Engine Core**: High-speed Node.js backend executing asynchronous network probes—including low-level socket TLS handshake validation, recursive DNS SPF/DMARC resolution, and concurrent non-blocking port diagnostics.
-* **📡 Headless REST Gateway**: Enterprise-ready JSON endpoints (`/api/scan`, `/api/health`) enabling seamless integration into automated DevSecOps pipelines and CI/CD security gating.
-* **🐳 Containerization & Deployment**: Lightweight multi-stage Docker containerization ready for immediate deployment across Render, AWS ECS, Fly.io, or on-premise infrastructure.
+* ** Presentation Tier**: Interactive developer dashboard powered by React 19, TypeScript, and Tailwind CSS. Features real-time SVG grading gauge telemetry, tabbed diagnostic grids, and copy-ready automated server remediation generators.
+* ** Security Engine Core**: High-speed Node.js backend executing asynchronous network probes—including low-level socket TLS handshake validation, recursive DNS SPF/DMARC resolution, and concurrent non-blocking port diagnostics.
+* ** Headless REST Gateway**: Enterprise-ready JSON endpoints (`/api/scan`, `/api/health`) enabling seamless integration into automated DevSecOps pipelines and CI/CD security gating.
+* ** Containerization & Deployment**: Lightweight multi-stage Docker containerization ready for immediate deployment across Render, AWS ECS, Fly.io, or on-premise infrastructure.
 
 ---
 
-## 🗺️ Roadmap
+##  Roadmap
 
 - [x] Live HTTP Security Headers auditor & grading algorithm
 - [x] Socket-level SSL/TLS certificate inspector with expiration countdown
@@ -298,7 +298,7 @@ Securify is architectured as a decoupled, high-performance security auditing sui
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 Contributions make the open-source community an incredible place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
@@ -323,7 +323,7 @@ Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for complete ter
 ---
 
 <div align="center">
-  Developed with ❤️ by <strong><a href="https://github.com/Hamidooh">Hamidooh</a></strong>
+  Developed with  by <strong><a href="https://github.com/Hamidooh">Hamidooh</a></strong>
   <br>
   <sub>If you find Securify useful, please consider giving it a ⭐ on GitHub!</sub>
 </div>
