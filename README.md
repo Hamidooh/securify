@@ -271,40 +271,14 @@ docker run -d -p 3002:3002 --name securify-app securify:latest
 
 ---
 
-## 📂 Project Directory Structure
+## 🧩 Modular System Architecture
 
-```text
-securify/
-├── .github/workflows/       # GitHub Actions automated CI matrix (Node 20, 22)
-├── server/
-│   └── index.js             # Scanner Engine: TLS sockets, DNS queries, port prober & SPA host
-├── src/
-│   ├── components/
-│   │   ├── Navbar.tsx       # Brutalist top bar with status telemetry
-│   │   ├── ScanInputBar.tsx # Monospace CLI audit prompt
-│   │   ├── OverviewCard.tsx # Speedometer SVG arc & 4 diagnostic data grids
-│   │   ├── HistoryDrawer.tsx# Cached audit history drawer
-│   │   └── Tabs/
-│   │       ├── HeadersTab.tsx       # Security headers breakdown & raw headers table
-│   │       ├── SslTab.tsx           # TLS handshake, cipher specs & SANs list
-│   │       ├── DnsTab.tsx           # SPF, DMARC, CAA, and IP routing records
-│   │       ├── PortsTab.tsx         # Port exposure grid & database warning alerts
-│   │       ├── RemediationTab.tsx   # Automated Nginx/Apache/Caddy/Vercel/Express fix generator
-│   │       └── OwaspChecklistTab.tsx# Interactive OWASP Top 10 checklist
-│   ├── utils/
-│   │   ├── scoreCalculator.ts       # Grade calculation & styling logic
-│   │   ├── remediationGenerator.ts  # Multi-platform server configuration generator
-│   │   └── storage.ts               # LocalStorage audit persistence
-│   ├── types/
-│   │   └── index.ts                 # TypeScript interfaces and telemetry contracts
-│   ├── App.tsx                      # Root dashboard orchestrator
-│   ├── main.tsx                     # React 19 entrypoint
-│   └── index.css                    # Tailwind CSS styles & monospace scrollbars
-├── tests/                           # Vitest automated test suites
-├── Dockerfile                       # Multi-stage production container definition
-├── render.yaml                      # Render 1-click blueprint configuration
-└── README.md                        # Project documentation
-```
+Securify is architectured as a decoupled, high-performance security auditing suite:
+
+* **🎨 Presentation Tier**: Interactive developer dashboard powered by React 19, TypeScript, and Tailwind CSS. Features real-time SVG grading gauge telemetry, tabbed diagnostic grids, and copy-ready automated server remediation generators.
+* **⚡ Security Engine Core**: High-speed Node.js backend executing asynchronous network probes—including low-level socket TLS handshake validation, recursive DNS SPF/DMARC resolution, and concurrent non-blocking port diagnostics.
+* **📡 Headless REST Gateway**: Enterprise-ready JSON endpoints (`/api/scan`, `/api/health`) enabling seamless integration into automated DevSecOps pipelines and CI/CD security gating.
+* **🐳 Containerization & Deployment**: Lightweight multi-stage Docker containerization ready for immediate deployment across Render, AWS ECS, Fly.io, or on-premise infrastructure.
 
 ---
 
@@ -338,14 +312,18 @@ Please review [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md) 
 
 ---
 
-## 📄 License
+## 📄 License & Attribution Notice
 
-Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more information.
+Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for complete terms.
+
+> **Notice on Fair Use & Anti-Plagiarism**:
+> Securify is an original open-source software project authored and maintained by **[@Hamidooh](https://github.com/Hamidooh)**.
+> While the MIT License permits free usage, modification, and distribution, any reproduction, redistribution, or derivation of this software **strictly requires the preservation of the original copyright notice and author attribution**. Direct scraping, uncredited mirror re-uploading, or deceptive duplication without proper attribution is prohibited.
 
 ---
 
 <div align="center">
-  Developed with ❤️ by <strong><a href="https://github.com/Hamidooh">Hamidooh</a></strong> (Herman Ofwiti)
+  Developed with ❤️ by <strong><a href="https://github.com/Hamidooh">Hamidooh</a></strong>
   <br>
   <sub>If you find Securify useful, please consider giving it a ⭐ on GitHub!</sub>
 </div>
