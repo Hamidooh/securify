@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: securify
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: node server/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3002

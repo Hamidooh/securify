@@ -3,12 +3,21 @@ import cors from 'cors';
 import tls from 'node:tls';
 import dns from 'node:dns/promises';
 import net from 'node:net';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const distPath = path.join(__dirname, '../dist');
 
 const app = express();
 const PORT = process.env.PORT || 3002;
 
 app.use(cors());
 app.use(express.json());
+
+// Serve static frontend in production
+app.use(express.static(distPath));
 
 // Health Check
 app.get('/api/health', (req, res) => {
@@ -491,6 +500,11 @@ app.post('/api/scan', async (req, res) => {
       message: err.message
     });
   }
+});
+
+// SPA Fallback for client-side routing in production
+app.get('*', (req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
 });
 
 app.listen(PORT, () => {

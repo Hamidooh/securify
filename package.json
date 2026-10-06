@@ -10,6 +10,7 @@
     "dev:client": "vite",
     "dev:server": "node server/index.js",
     "build": "tsc && vite build",
+    "start": "node server/index.js",
     "preview": "vite preview",
     "test": "vitest run"
   },
