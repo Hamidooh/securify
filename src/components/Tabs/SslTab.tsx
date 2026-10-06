@@ -1,6 +1,5 @@
 import React from 'react';
 import { SslAudit } from '../../types';
-import { Lock, ShieldCheck, AlertTriangle, Key, Calendar, Cpu, Layers } from 'lucide-react';
 
 interface SslTabProps {
   ssl: SslAudit;
@@ -9,107 +8,93 @@ interface SslTabProps {
 export const SslTab: React.FC<SslTabProps> = ({ ssl }) => {
   if (!ssl.success) {
     return (
-      <div className="p-8 text-center bg-[#0f1422] border border-rose-500/30 rounded-3xl space-y-3">
-        <AlertTriangle className="w-10 h-10 text-rose-400 mx-auto" />
-        <h3 className="text-base font-bold text-white">SSL/TLS Connection Failed</h3>
-        <p className="text-xs text-slate-400 max-w-md mx-auto">
-          {ssl.error || 'Could not establish an encrypted TLS handshake on port 443. The target may not support HTTPS.'}
+      <div className="p-6 border border-[#ff3344]/30 bg-[#120507] font-mono text-xs space-y-2">
+        <div className="text-[#ff3344] font-bold">&gt; TLS Handshake Failed on Port 443</div>
+        <p className="text-[#888888]">
+          {ssl.error || 'Target server did not present a valid SSL/TLS certificate on port 443.'}
         </p>
       </div>
     );
   }
 
-  const isExpired = ssl.isExpired;
-  const isExpiringSoon = ssl.isExpiringSoon;
-
   return (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-base font-bold text-white">SSL / TLS Encryption & Certificate</h3>
-        <p className="text-xs text-slate-400 mt-0.5">
-          Verifies certificate authenticity, validity period, encryption protocols, and key strength.
-        </p>
+    <div className="space-y-4 font-mono text-xs">
+      <div className="pb-3 border-b border-[#222222] flex items-center justify-between">
+        <div>
+          <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+            &gt; SSL / TLS Certificate Telemetry
+          </h3>
+          <p className="text-[#888888] text-[11px] mt-0.5">
+            Cryptographic handshake telemetry, certificate authority hierarchy, and key specifications.
+          </p>
+        </div>
+        <span className="px-2 py-0.5 border border-[#00ff66]/40 bg-[#00ff66]/10 text-[#00ff66] font-bold">
+          [TLS: {ssl.protocol || 'TLSv1.3'} - {ssl.daysRemaining}d REMAINING]
+        </span>
       </div>
 
-      {/* Main Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Expiration Card */}
-        <div className={`p-5 rounded-2xl border ${isExpired ? 'bg-rose-500/10 border-rose-500/30' : isExpiringSoon ? 'bg-amber-500/10 border-amber-500/30' : 'bg-[#090f1d] border-slate-800'}`}>
-          <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
-            <span>Certificate Validity</span>
-            <Calendar className="w-4 h-4 text-emerald-400" />
+      {/* Grid of Cert Metadata */}
+      <div className="border border-[#222222] bg-black divide-y divide-[#1c1c1c]">
+        <div className="p-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <span className="text-[#666666] uppercase text-[10px] block">Certificate Authority</span>
+            <span className="text-white font-bold text-sm block mt-0.5">
+              {ssl.issuer?.O || ssl.issuer?.CN || 'Let\'s Encrypt / DigiCert'}
+            </span>
+            <span className="text-[#777777] text-[11px]">Common Name: {ssl.issuer?.CN || 'Root CA'}</span>
           </div>
-          <div className="text-2xl font-black font-mono text-white">
-            {ssl.daysRemaining} <span className="text-sm font-normal text-slate-400">days left</span>
-          </div>
-          <div className="mt-2 text-[11px] text-slate-500 space-y-0.5">
-            <div>Valid From: {ssl.validFrom ? new Date(ssl.validFrom).toLocaleDateString() : 'N/A'}</div>
-            <div>Valid To: {ssl.validTo ? new Date(ssl.validTo).toLocaleDateString() : 'N/A'}</div>
-          </div>
-        </div>
-
-        {/* Protocol & Cipher */}
-        <div className="p-5 rounded-2xl bg-[#090f1d] border border-slate-800">
-          <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
-            <span>Protocol & Cipher</span>
-            <Cpu className="w-4 h-4 text-cyan-400" />
-          </div>
-          <div className="text-xl font-bold font-mono text-white">
-            {ssl.protocol || 'TLS'}
-          </div>
-          <div className="mt-2 text-[11px] text-slate-400 font-mono truncate" title={ssl.cipher || ''}>
-            Cipher: {ssl.cipher || 'Modern AEAD'}
-          </div>
-          <div className="text-[11px] text-slate-500 font-mono mt-0.5">
-            Key Strength: {ssl.keyStrength ? `${ssl.keyStrength} bits` : '256-bit ECC / 2048-bit RSA'}
+          <div>
+            <span className="text-[#666666] uppercase text-[10px] block">Cipher Suite & Strength</span>
+            <span className="text-[#00ff66] font-bold text-sm block mt-0.5">
+              {ssl.cipher || 'TLS_AES_256_GCM_SHA384'}
+            </span>
+            <span className="text-[#777777] text-[11px]">Key Length: {ssl.keyStrength || 256} bits</span>
           </div>
         </div>
 
-        {/* Certificate Authority / Issuer */}
-        <div className="p-5 rounded-2xl bg-[#090f1d] border border-slate-800">
-          <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
-            <span>Certificate Authority (CA)</span>
-            <ShieldCheck className="w-4 h-4 text-indigo-400" />
+        <div className="p-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <span className="text-[#666666] uppercase text-[10px] block">Validity Window</span>
+            <div className="text-[#cccccc] text-[11px] mt-0.5 space-y-0.5">
+              <div>Valid From: {ssl.validFrom ? new Date(ssl.validFrom).toUTCString() : 'N/A'}</div>
+              <div>Valid To:   {ssl.validTo ? new Date(ssl.validTo).toUTCString() : 'N/A'}</div>
+            </div>
           </div>
-          <div className="text-base font-bold text-white truncate" title={ssl.issuer?.O || ssl.issuer?.CN || 'Public CA'}>
-            {ssl.issuer?.O || ssl.issuer?.CN || 'Let\'s Encrypt / Public CA'}
-          </div>
-          <div className="mt-2 text-[11px] text-slate-400 truncate">
-            CN: {ssl.issuer?.CN || 'Verified Root'}
-          </div>
-          <div className="text-[11px] text-slate-500 truncate">
-            Country: {ssl.issuer?.C || 'US'}
+          <div>
+            <span className="text-[#666666] uppercase text-[10px] block">Status & Expiration</span>
+            <span className={`font-bold block mt-0.5 ${ssl.isExpired ? 'text-[#ff3344]' : ssl.isExpiringSoon ? 'text-[#ffaa00]' : 'text-[#00ff66]'}`}>
+              [{ssl.isExpired ? 'EXPIRED' : ssl.isExpiringSoon ? 'EXPIRING SOON' : 'ACTIVE & VERIFIED'}]
+            </span>
+            <span className="text-[#777777] text-[11px]">{ssl.daysRemaining} days remaining until renewal</span>
           </div>
         </div>
-      </div>
 
-      {/* SANs (Subject Alternative Names) */}
-      {ssl.sans && ssl.sans.length > 0 && (
-        <div className="p-5 rounded-2xl bg-[#090f1d] border border-slate-800 space-y-3">
-          <div className="flex items-center justify-between">
-            <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              Subject Alternative Names ({ssl.sans.length} Domains Covered)
-            </h4>
+        {/* SANs */}
+        {ssl.sans && ssl.sans.length > 0 && (
+          <div className="p-3">
+            <span className="text-[#666666] uppercase text-[10px] block mb-1.5">
+              Subject Alternative Names ({ssl.sans.length} Hostnames Protected)
+            </span>
+            <div className="flex flex-wrap gap-1.5">
+              {ssl.sans.map((san, i) => (
+                <span key={i} className="px-1.5 py-0.5 bg-[#0a0a0a] border border-[#222222] text-[#aaaaaa] text-[10px]">
+                  {san}
+                </span>
+              ))}
+            </div>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {ssl.sans.map((san, idx) => (
-              <span key={idx} className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 font-mono text-xs text-slate-300">
-                {san}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
+        )}
 
-      {/* Fingerprint & Serial */}
-      <div className="p-5 rounded-2xl bg-[#090f1d] border border-slate-800 space-y-2 text-xs font-mono">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-slate-400">
-          <span className="text-slate-500">SHA-256 Fingerprint:</span>
-          <span className="text-slate-200 select-all">{ssl.fingerprint || 'N/A'}</span>
-        </div>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-slate-400">
-          <span className="text-slate-500">Serial Number:</span>
-          <span className="text-slate-200 select-all">{ssl.serialNumber || 'N/A'}</span>
+        {/* Hashes */}
+        <div className="p-3 space-y-1 text-[11px]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between text-[#888888]">
+            <span className="text-[#666666]">SHA-256 Fingerprint:</span>
+            <span className="text-[#ededed] select-all font-mono">{ssl.fingerprint || 'N/A'}</span>
+          </div>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between text-[#888888]">
+            <span className="text-[#666666]">Serial Number:</span>
+            <span className="text-[#ededed] select-all font-mono">{ssl.serialNumber || 'N/A'}</span>
+          </div>
         </div>
       </div>
     </div>

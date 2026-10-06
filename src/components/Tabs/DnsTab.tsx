@@ -1,6 +1,5 @@
 import React from 'react';
 import { DnsAudit } from '../../types';
-import { MailCheck, CheckCircle2, XCircle, Globe, Shield, Server } from 'lucide-react';
 
 interface DnsTabProps {
   dns: DnsAudit;
@@ -8,128 +7,106 @@ interface DnsTabProps {
 
 export const DnsTab: React.FC<DnsTabProps> = ({ dns }) => {
   return (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-base font-bold text-white">DNS & Email Authentication (SPF / DMARC)</h3>
-        <p className="text-xs text-slate-400 mt-0.5">
-          Email spoofing defenses and DNS configuration verification to prevent phishing campaigns using your domain.
-        </p>
+    <div className="space-y-6 font-mono text-xs">
+      <div className="pb-3 border-b border-[#222222] flex items-center justify-between">
+        <div>
+          <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+            &gt; DNS & Email Domain Authentication
+          </h3>
+          <p className="text-[#888888] text-[11px] mt-0.5">
+            Validation of SPF records, DMARC enforcement policies, and Mail Exchanger configurations.
+          </p>
+        </div>
+        <span className={`px-2 py-0.5 border text-xs font-bold ${
+          dns.hasSpf && dns.hasDmarc 
+            ? 'border-[#00ff66]/40 text-[#00ff66] bg-[#00ff66]/10' 
+            : 'border-[#ffaa00]/40 text-[#ffaa00] bg-[#ffaa00]/10'
+        }`}>
+          [{dns.hasSpf && dns.hasDmarc ? 'SPOOFING_SHIELD: ACTIVE' : 'SPOOFING_SHIELD: GAPS DETECTED'}]
+        </span>
       </div>
 
-      {/* SPF & DMARC Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* SPF & DMARC Dual Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {/* SPF */}
-        <div className={`p-5 rounded-2xl border ${dns.hasSpf ? 'bg-[#090f1d] border-emerald-500/20' : 'bg-[#0f1422] border-rose-500/30'}`}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <MailCheck className={`w-5 h-5 ${dns.hasSpf ? 'text-emerald-400' : 'text-rose-400'}`} />
-              <h4 className="text-sm font-bold text-white">SPF (Sender Policy Framework)</h4>
-            </div>
-            {dns.hasSpf ? (
-              <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-                Active
-              </span>
+        <div className="p-3 bg-black border border-[#222222] space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="font-bold text-white">SPF (Sender Policy Framework)</span>
+            <span className={`px-1.5 py-0.2 border text-[10px] font-bold ${dns.hasSpf ? 'border-[#00ff66]/40 text-[#00ff66]' : 'border-[#ff3344]/40 text-[#ff3344]'}`}>
+              [{dns.hasSpf ? 'PASS' : 'MISSING'}]
+            </span>
+          </div>
+          <p className="text-[#777777] text-[11px]">
+            Restricts which outbound mail servers can authoritatively send emails on behalf of this domain.
+          </p>
+          <div className="p-2 bg-[#0a0a0a] border border-[#1a1a1a] text-[11px] text-[#cccccc] break-all">
+            {dns.spfRecord ? (
+              <span className="text-[#00ff66]">{dns.spfRecord}</span>
             ) : (
-              <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-rose-500/10 text-rose-400 border border-rose-500/30">
-                Missing
-              </span>
+              <span className="text-[#ff7777]">No TXT record starting with v=spf1 configured.</span>
             )}
           </div>
-          <p className="text-xs text-slate-400 mb-3">
-            SPF authorizes specific mail servers to send emails on behalf of your domain, preventing unauthorized sender spoofing.
-          </p>
-          {dns.spfRecord ? (
-            <div className="p-2.5 bg-[#060a14] rounded-xl border border-slate-800 font-mono text-xs text-emerald-400 break-all">
-              {dns.spfRecord}
-            </div>
-          ) : (
-            <div className="p-2.5 bg-[#060a14] rounded-xl border border-rose-500/20 font-mono text-xs text-rose-300">
-              Fix: Add a TXT DNS record: <code>v=spf1 include:_spf.google.com ~all</code>
-            </div>
-          )}
         </div>
 
         {/* DMARC */}
-        <div className={`p-5 rounded-2xl border ${dns.hasDmarc ? 'bg-[#090f1d] border-cyan-500/20' : 'bg-[#0f1422] border-rose-500/30'}`}>
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <Shield className={`w-5 h-5 ${dns.hasDmarc ? 'text-cyan-400' : 'text-rose-400'}`} />
-              <h4 className="text-sm font-bold text-white">DMARC Policy</h4>
-            </div>
-            {dns.hasDmarc ? (
-              <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
-                Enforced
-              </span>
+        <div className="p-3 bg-black border border-[#222222] space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="font-bold text-white">DMARC (Domain-based Message Authentication)</span>
+            <span className={`px-1.5 py-0.2 border text-[10px] font-bold ${dns.hasDmarc ? 'border-[#00ff66]/40 text-[#00ff66]' : 'border-[#ff3344]/40 text-[#ff3344]'}`}>
+              [{dns.hasDmarc ? 'ENFORCED' : 'MISSING'}]
+            </span>
+          </div>
+          <p className="text-[#777777] text-[11px]">
+            Instructs recipient servers whether to reject or quarantine forged emails sent under this domain.
+          </p>
+          <div className="p-2 bg-[#0a0a0a] border border-[#1a1a1a] text-[11px] text-[#cccccc] break-all">
+            {dns.dmarcRecord ? (
+              <span className="text-[#00ff66]">{dns.dmarcRecord}</span>
             ) : (
-              <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-rose-500/10 text-rose-400 border border-rose-500/30">
-                Missing
-              </span>
+              <span className="text-[#ff7777]">No TXT record on _dmarc with v=DMARC1 found.</span>
             )}
           </div>
-          <p className="text-xs text-slate-400 mb-3">
-            DMARC instructs recipient mail servers how to treat unauthenticated emails (quarantine, reject) and sends abuse telemetry.
-          </p>
-          {dns.dmarcRecord ? (
-            <div className="p-2.5 bg-[#060a14] rounded-xl border border-slate-800 font-mono text-xs text-cyan-400 break-all">
-              {dns.dmarcRecord}
-            </div>
-          ) : (
-            <div className="p-2.5 bg-[#060a14] rounded-xl border border-rose-500/20 font-mono text-xs text-rose-300">
-              Fix: Add TXT record to <code>_dmarc.yourdomain.com</code>: <code>v=DMARC1; p=quarantine;</code>
-            </div>
-          )}
         </div>
       </div>
 
-      {/* IP Records & Mail Exchangers */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* A & AAAA */}
-        <div className="p-5 rounded-2xl bg-[#090f1d] border border-slate-800 space-y-3">
-          <div className="flex items-center gap-2">
-            <Globe className="w-4 h-4 text-emerald-400" />
-            <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
-              A / AAAA IP Addresses
-            </h4>
+      {/* Network & Mail Records Table */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {/* IPv4 / IPv6 */}
+        <div className="border border-[#222222] bg-black">
+          <div className="p-2.5 bg-[#0c0c0c] border-b border-[#222222] text-[#777777] uppercase text-[10px] font-semibold">
+            Resolved IP Addresses (A / AAAA)
           </div>
-          <div className="space-y-1.5 font-mono text-xs">
-            {dns.aRecords.length > 0 ? (
-              dns.aRecords.map((ip, i) => (
-                <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
-                  <span className="text-slate-500 font-sans">IPv4</span>
-                  <span>{ip}</span>
-                </div>
-              ))
-            ) : (
-              <div className="text-slate-500 text-xs">No IPv4 records found</div>
-            )}
-
+          <div className="p-3 space-y-1 text-[11px]">
+            {dns.aRecords.map((ip, i) => (
+              <div key={i} className="flex justify-between py-0.5 border-b border-[#141414]">
+                <span className="text-[#666666]">IPv4 Host</span>
+                <span className="text-[#ededed] font-bold">{ip}</span>
+              </div>
+            ))}
             {dns.aaaaRecords.map((ip, i) => (
-              <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
-                <span className="text-slate-500 font-sans">IPv6</span>
-                <span className="truncate">{ip}</span>
+              <div key={i} className="flex justify-between py-0.5 border-b border-[#141414]">
+                <span className="text-[#666666]">IPv6 Host</span>
+                <span className="text-[#ededed] truncate max-w-[200px]">{ip}</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* MX Records */}
-        <div className="p-5 rounded-2xl bg-[#090f1d] border border-slate-800 space-y-3">
-          <div className="flex items-center gap-2">
-            <Server className="w-4 h-4 text-indigo-400" />
-            <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
-              Mail Exchangers (MX Records)
-            </h4>
+        {/* MX */}
+        <div className="border border-[#222222] bg-black">
+          <div className="p-2.5 bg-[#0c0c0c] border-b border-[#222222] text-[#777777] uppercase text-[10px] font-semibold">
+            Mail Exchanger Servers (MX)
           </div>
-          <div className="space-y-1.5 font-mono text-xs">
+          <div className="p-3 space-y-1 text-[11px]">
             {dns.mxRecords.length > 0 ? (
               dns.mxRecords.map((mx, i) => (
-                <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
-                  <span className="truncate">{mx.exchange}</span>
-                  <span className="text-slate-500 font-sans">Priority {mx.priority}</span>
+                <div key={i} className="flex justify-between py-0.5 border-b border-[#141414]">
+                  <span className="text-[#ededed] truncate max-w-[210px]">{mx.exchange}</span>
+                  <span className="text-[#00ff66]">Priority {mx.priority}</span>
                 </div>
               ))
             ) : (
-              <div className="text-slate-500 text-xs">No MX records configured</div>
+              <div className="text-[#666666]">No direct MX records found.</div>
             )}
           </div>
         </div>

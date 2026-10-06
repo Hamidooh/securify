@@ -8,32 +8,29 @@ export default {
   theme: {
     extend: {
       colors: {
-        security: {
-          50: '#ecfdf5',
-          100: '#d1fae5',
-          200: '#a7f3d0',
-          300: '#6ee7b7',
-          400: '#34d399',
-          500: '#10b981',
-          600: '#059669',
-          700: '#047857',
-          800: '#065f46',
-          900: '#064e3b',
-        },
-        cyber: {
-          dark: '#0a0f1d',
-          card: '#0f172a',
-          surface: '#182234',
-          border: '#2a3b53',
-          neon: '#00f5a0',
-          cyan: '#00d2ff',
-          danger: '#ff3366',
-          warning: '#ffaa00',
+        neo: {
+          black: '#000000',
+          dark: '#080808',
+          surface: '#0f0f0f',
+          card: '#121212',
+          border: '#222222',
+          borderHover: '#333333',
+          borderLight: '#444444',
+          green: '#00ff66',
+          greenMuted: '#00cc52',
+          greenDim: '#003314',
+          red: '#ff3344',
+          redDim: '#33080c',
+          amber: '#ffaa00',
+          amberDim: '#332200',
+          cyan: '#00eeff',
+          muted: '#888888',
+          text: '#ededed',
         }
       },
       fontFamily: {
-        mono: ['JetBrains Mono', 'Fira Code', 'Cascadia Code', 'monospace'],
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'Geist Mono', 'Cascadia Code', 'Consolas', 'monospace'],
+        sans: ['Geist', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
       }
     },
   },

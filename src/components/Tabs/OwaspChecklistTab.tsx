@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { ShieldCheck, CheckSquare, Square, AlertCircle, ExternalLink } from 'lucide-react';
 
 interface OwaspItem {
   id: string;
@@ -16,7 +15,7 @@ const OWASP_ITEMS: OwaspItem[] = [
     code: 'A01:2021',
     title: 'Broken Access Control',
     risk: 'Critical',
-    desc: 'Users can act outside of their intended permissions. Flaws lead to unauthorized information disclosure or modification.',
+    desc: 'Users can act outside of their intended permissions. Leads to unauthorized disclosure or modification of data.',
     recommendation: 'Implement deny-by-default access control and enforce record-level ownership checks.'
   },
   {
@@ -24,7 +23,7 @@ const OWASP_ITEMS: OwaspItem[] = [
     code: 'A02:2021',
     title: 'Cryptographic Failures',
     risk: 'Critical',
-    desc: 'Exposure of sensitive data (PII, credentials, cards) in transit or at rest due to weak algorithms or missing HTTPS.',
+    desc: 'Exposure of sensitive data (PII, tokens) in transit or at rest due to weak algorithms or missing HTTPS.',
     recommendation: 'Enforce TLS 1.3, HSTS, strong modern ciphers, and hash passwords using bcrypt or argon2id.'
   },
   {
@@ -32,7 +31,7 @@ const OWASP_ITEMS: OwaspItem[] = [
     code: 'A03:2021',
     title: 'Injection (SQL, NoSQL, OS)',
     risk: 'Critical',
-    desc: 'Hostile data sent to an interpreter as part of a command or query tricks the interpreter into executing unintended commands.',
+    desc: 'Hostile data sent to an interpreter as part of a command or query tricks interpreter into unintended execution.',
     recommendation: 'Use parameterized queries / ORMs and validate and sanitize all untrusted user inputs.'
   },
   {
@@ -72,7 +71,7 @@ const OWASP_ITEMS: OwaspItem[] = [
     code: 'A08:2021',
     title: 'Software and Data Integrity Failures',
     risk: 'High',
-    desc: 'Code and infrastructure that does not protect against integrity violations (untrusted CI/CD plugins, insecure deserialization).',
+    desc: 'Code and infrastructure that does not protect against integrity violations (untrusted plugins, insecure deserialization).',
     recommendation: 'Sign software releases, verify checksums, and avoid insecure object deserialization.'
   },
   {
@@ -88,8 +87,8 @@ const OWASP_ITEMS: OwaspItem[] = [
     code: 'A10:2021',
     title: 'Server-Side Request Forgery (SSRF)',
     risk: 'High',
-    desc: 'Flaw occurs when web application fetches a remote resource without validating user-supplied URLs (e.g. cloud metadata attacks).',
-    recommendation: 'Sanitize URLs, restrict target protocols to HTTP/HTTPS, and block requests to internal IP ranges (127.0.0.1, 169.254.169.254).'
+    desc: 'Flaw occurs when web application fetches a remote resource without validating user-supplied URLs.',
+    recommendation: 'Sanitize URLs, restrict target protocols to HTTP/HTTPS, and block requests to internal IP ranges.'
   }
 ];
 
@@ -103,21 +102,22 @@ export const OwaspChecklistTab: React.FC = () => {
   const checkedCount = Object.values(checkedIds).filter(Boolean).length;
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div className="space-y-4 font-mono text-xs">
+      <div className="pb-3 border-b border-[#222222] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h3 className="text-base font-bold text-white">OWASP Top 10 Web Application Security Checklist</h3>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Standard awareness document representing the most critical security risks to web applications worldwide.
+          <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+            &gt; OWASP Top 10 Web Application Security Checklist
+          </h3>
+          <p className="text-[#888888] text-[11px] mt-0.5">
+            Industry standard benchmark for web security risk mitigation.
           </p>
         </div>
-
-        <div className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-emerald-400 self-start sm:self-auto">
-          {checkedCount} / {OWASP_ITEMS.length} Audited
-        </div>
+        <span className="px-2.5 py-1 border border-[#00ff66]/40 bg-[#00ff66]/10 text-[#00ff66] font-bold self-start sm:self-auto">
+          [{checkedCount} / {OWASP_ITEMS.length} VERIFIED]
+        </span>
       </div>
 
-      <div className="space-y-3">
+      <div className="border border-[#222222] bg-black divide-y divide-[#1a1a1a]">
         {OWASP_ITEMS.map((item) => {
           const isChecked = checkedIds[item.id] ?? false;
 
@@ -125,47 +125,31 @@ export const OwaspChecklistTab: React.FC = () => {
             <div
               key={item.id}
               onClick={() => toggleCheck(item.id)}
-              className={`p-4 rounded-2xl border cursor-pointer transition select-none ${
-                isChecked
-                  ? 'bg-[#090f1d] border-emerald-500/30'
-                  : 'bg-[#0d1424] border-slate-800 hover:border-slate-700'
-              }`}
+              className="p-3 cursor-pointer hover:bg-[#080808] transition flex items-start gap-3 select-none"
             >
-              <div className="flex items-start gap-3">
-                <button
-                  type="button"
-                  className="mt-0.5 text-slate-400 hover:text-white transition"
-                >
-                  {isChecked ? (
-                    <CheckSquare className="w-5 h-5 text-emerald-400 fill-emerald-500/20" />
-                  ) : (
-                    <Square className="w-5 h-5 text-slate-600" />
-                  )}
-                </button>
+              <span className={`font-bold mt-0.5 ${isChecked ? 'text-[#00ff66]' : 'text-[#555555]'}`}>
+                {isChecked ? '[X]' : '[ ]'}
+              </span>
 
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[11px] font-mono text-cyan-400 font-bold">{item.code}</span>
-                      <h4 className={`text-sm font-bold ${isChecked ? 'text-emerald-300 line-through opacity-80' : 'text-white'}`}>
-                        {item.title}
-                      </h4>
-                    </div>
-
-                    <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full self-start sm:self-auto ${
-                      item.risk === 'Critical' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/30' :
-                      'bg-orange-500/10 text-orange-400 border border-orange-500/30'
-                    }`}>
-                      {item.risk} Risk
+              <div className="flex-1 min-w-0 space-y-1">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[#00eeff] font-bold text-[11px]">{item.code}</span>
+                    <span className={`font-bold ${isChecked ? 'text-[#00ff66] line-through' : 'text-white'}`}>
+                      {item.title}
                     </span>
                   </div>
+                  <span className={`text-[10px] self-start sm:self-auto font-bold ${
+                    item.risk === 'Critical' ? 'text-[#ff3344]' : 'text-[#ffaa00]'
+                  }`}>
+                    [{item.risk}]
+                  </span>
+                </div>
 
-                  <p className="text-xs text-slate-400 mt-1">{item.desc}</p>
-
-                  <div className="mt-2 text-xs font-mono text-slate-300 bg-[#060a14] p-2 rounded-lg border border-slate-800">
-                    <span className="text-emerald-400 font-sans font-medium mr-1">Recommended Defense:</span>
-                    {item.recommendation}
-                  </div>
+                <p className="text-[#888888] text-[11px]">{item.desc}</p>
+                <div className="p-1.5 bg-[#0a0a0a] border border-[#1a1a1a] text-[11px] text-[#cccccc]">
+                  <span className="text-[#00ff66] mr-1">Recommended Action:</span>
+                  {item.recommendation}
                 </div>
               </div>
             </div>

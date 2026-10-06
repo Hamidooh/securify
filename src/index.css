@@ -4,29 +4,31 @@
 
 @layer base {
   body {
-    @apply bg-[#0a0f1d] text-slate-100 antialiased selection:bg-emerald-500/30 selection:text-emerald-200;
+    @apply bg-black text-[#ededed] antialiased selection:bg-[#00ff66]/20 selection:text-[#00ff66] font-mono;
   }
 }
 
-/* Custom cyber scrollbars */
+/* Sharp Brutalist developer scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.6);
+  background: #000000;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(51, 65, 85, 0.6);
-  border-radius: 4px;
+  background: #222222;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(16, 185, 129, 0.7);
+  background: #00ff66;
 }
 
-.mono {
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+/* Technical grid background pattern */
+.neo-grid-bg {
+  background-image: linear-gradient(to right, #141414 1px, transparent 1px),
+                    linear-gradient(to bottom, #141414 1px, transparent 1px);
+  background-size: 32px 32px;
 }

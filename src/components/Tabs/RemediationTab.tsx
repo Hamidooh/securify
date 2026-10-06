@@ -7,7 +7,7 @@ import {
   generateVercelConfig, 
   generateExpressConfig 
 } from '../../utils/remediationGenerator';
-import { Copy, Check, Terminal, Sparkles } from 'lucide-react';
+import { Copy, Check } from 'lucide-react';
 
 interface RemediationTabProps {
   headers: HeadersAudit;
@@ -53,46 +53,45 @@ export const RemediationTab: React.FC<RemediationTabProps> = ({ headers }) => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div className="space-y-4 font-mono text-xs">
+      <div className="pb-3 border-b border-[#222222] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h3 className="text-base font-bold text-white flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-emerald-400" />
-            <span>Automated Remediation Generator</span>
+          <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+            &gt; Server Hardening Code Generator
           </h3>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Instantly generate drop-in configurations tailored to eliminate all detected security header vulnerabilities.
+          <p className="text-[#888888] text-[11px] mt-0.5">
+            Drop-in server configurations pre-populated to remediate all missing security headers.
           </p>
         </div>
 
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs shadow-md shadow-emerald-600/20 transition self-start sm:self-auto"
+          className="px-3 py-1.5 bg-[#00ff66] hover:bg-[#00dd55] text-black font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 self-start sm:self-auto transition"
         >
-          {copied ? <Check className="w-3.5 h-3.5 text-white" /> : <Copy className="w-3.5 h-3.5" />}
-          <span>{copied ? 'Copied to Clipboard' : 'Copy Configuration'}</span>
+          {copied ? <Check className="w-3.5 h-3.5 text-black" /> : <Copy className="w-3.5 h-3.5 text-black" />}
+          <span>{copied ? '[Copied]' : '[Copy Config]'}</span>
         </button>
       </div>
 
       {/* Server selector tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-800 pb-2 overflow-x-auto">
+      <div className="flex items-center gap-1 border-b border-[#222222] pb-2 overflow-x-auto">
         {servers.map((s) => (
           <button
             key={s.id}
             onClick={() => setSelectedServer(s.id)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition ${
+            className={`px-3 py-1 border text-xs whitespace-nowrap transition ${
               selectedServer === s.id
-                ? 'bg-slate-800 text-emerald-400 font-bold border border-emerald-500/30'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
+                ? 'border-[#00ff66] bg-[#00ff66]/10 text-[#00ff66] font-bold'
+                : 'border-[#222222] bg-[#080808] text-[#888888] hover:text-[#ededed] hover:border-[#333333]'
             }`}
           >
-            {s.name}
+            [{s.name}]
           </button>
         ))}
       </div>
 
-      {/* Code Display */}
-      <div className="p-4 bg-[#060a14] border border-slate-800 rounded-2xl font-mono text-xs text-emerald-300 leading-relaxed overflow-x-auto">
+      {/* Code Container */}
+      <div className="p-4 bg-[#050505] border border-[#222222] text-[#00ff66] text-[11px] leading-relaxed overflow-x-auto select-all">
         <pre>{configText}</pre>
       </div>
     </div>

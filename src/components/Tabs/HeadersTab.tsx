@@ -1,7 +1,5 @@
 import React from 'react';
 import { HeadersAudit } from '../../types';
-import { CheckCircle2, XCircle, AlertTriangle, ChevronRight, Copy } from 'lucide-react';
-import { getImpactColor } from '../../utils/scoreCalculator';
 
 interface HeadersTabProps {
   headers: HeadersAudit;
@@ -9,100 +7,96 @@ interface HeadersTabProps {
 
 export const HeadersTab: React.FC<HeadersTabProps> = ({ headers }) => {
   return (
-    <div className="space-y-6">
-      {/* Top Description */}
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 font-mono text-xs">
+      {/* Title */}
+      <div className="pb-3 border-b border-[#222222] flex items-center justify-between">
         <div>
-          <h3 className="text-base font-bold text-white">HTTP Security Headers</h3>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Security headers protect your web application against XSS, clickjacking, MIME-sniffing, and SSL stripping.
+          <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+            &gt; HTTP Security Headers Analysis
+          </h3>
+          <p className="text-[#888888] text-[11px] mt-0.5">
+            Core HTTP defense headers to mitigate Cross-Site Scripting, Clickjacking, and MIME confusion.
           </p>
         </div>
+        <span className="px-2 py-0.5 border border-[#00ff66]/40 bg-[#00ff66]/10 text-[#00ff66] font-bold">
+          [Grade {headers.grade} - {headers.score}/100]
+        </span>
       </div>
 
-      {/* Findings List */}
-      <div className="space-y-3">
-        {headers.findings.map((item, idx) => (
-          <div
-            key={idx}
-            className={`p-4 rounded-2xl border transition ${
-              item.status === 'pass'
-                ? 'bg-[#090f1d] border-emerald-500/20'
-                : item.status === 'fail'
-                ? 'bg-[#0f1422] border-rose-500/30'
-                : 'bg-[#0f1422] border-amber-500/30'
-            }`}
-          >
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div className="flex items-center gap-3">
-                {item.status === 'pass' ? (
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
-                ) : item.status === 'fail' ? (
-                  <XCircle className="w-5 h-5 text-rose-400 shrink-0" />
-                ) : (
-                  <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />
-                )}
+      {/* Findings Table */}
+      <div className="border border-[#222222] bg-black">
+        <div className="grid grid-cols-12 bg-[#0c0c0c] border-b border-[#222222] p-2.5 text-[#777777] uppercase text-[10px] font-semibold">
+          <div className="col-span-4">Directive Header</div>
+          <div className="col-span-2">Status</div>
+          <div className="col-span-2">Severity</div>
+          <div className="col-span-4">Evaluation</div>
+        </div>
 
-                <div>
-                  <h4 className="text-sm font-bold text-white font-mono">{item.header}</h4>
-                  <p className="text-xs text-slate-300 mt-0.5">{item.description}</p>
+        <div className="divide-y divide-[#1a1a1a]">
+          {headers.findings.map((item, idx) => (
+            <div key={idx} className="p-3 hover:bg-[#080808] transition">
+              <div className="grid grid-cols-12 items-center gap-2">
+                <div className="col-span-4 font-bold text-white truncate">
+                  {item.header}
+                </div>
+                <div className="col-span-2">
+                  <span className={`px-1.5 py-0.2 border text-[10px] font-bold ${
+                    item.status === 'pass'
+                      ? 'border-[#00ff66]/40 text-[#00ff66] bg-[#00ff66]/10'
+                      : item.status === 'fail'
+                      ? 'border-[#ff3344]/40 text-[#ff3344] bg-[#ff3344]/10'
+                      : 'border-[#ffaa00]/40 text-[#ffaa00] bg-[#ffaa00]/10'
+                  }`}>
+                    [{item.status.toUpperCase()}]
+                  </span>
+                </div>
+                <div className="col-span-2">
+                  <span className={`text-[10px] font-semibold ${
+                    item.impact === 'Critical' ? 'text-[#ff3344]' :
+                    item.impact === 'High' ? 'text-[#ff7700]' :
+                    item.impact === 'Medium' ? 'text-[#ffaa00]' :
+                    'text-[#888888]'
+                  }`}>
+                    {item.impact}
+                  </span>
+                </div>
+                <div className="col-span-4 text-[#888888] text-[11px] truncate" title={item.description}>
+                  {item.description}
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 self-start sm:self-center">
-                <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${getImpactColor(item.impact)}`}>
-                  {item.impact}
-                </span>
+              {/* Detail / Configured value */}
+              {item.value && (
+                <div className="mt-2 p-2 bg-[#0a0a0a] border border-[#222222] text-[#00ff66] text-[11px] break-all">
+                  <span className="text-[#666666] mr-2">Configured value:</span>
+                  {item.value}
+                </div>
+              )}
 
-                {item.scoreChange < 0 && (
-                  <span className="text-[10px] font-mono text-rose-400 font-bold bg-rose-500/10 px-1.5 py-0.5 rounded">
-                    {item.scoreChange} pts
-                  </span>
-                )}
-              </div>
+              {/* Remediation */}
+              {item.remediation && (
+                <div className="mt-2 p-2 bg-[#120507] border border-[#ff3344]/30 text-[#ff9999] text-[11px]">
+                  <span className="text-[#ff3344] font-bold block mb-0.5">Recommended Defense:</span>
+                  <code>{item.remediation}</code>
+                </div>
+              )}
             </div>
-
-            {/* If passed, show value */}
-            {item.value && (
-              <div className="mt-3 p-2.5 bg-[#060a14] rounded-xl border border-slate-800 font-mono text-xs text-emerald-400/90 break-all">
-                <span className="text-slate-500 mr-2">Configured value:</span>
-                {item.value}
-              </div>
-            )}
-
-            {/* If failed or warning, show remediation */}
-            {item.remediation && (
-              <div className="mt-3 p-2.5 bg-[#060a14] rounded-xl border border-rose-500/20 font-mono text-xs text-rose-300">
-                <span className="text-slate-400 font-semibold block mb-1">Recommended Fix:</span>
-                <code>{item.remediation}</code>
-              </div>
-            )}
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
-      {/* Raw Response Headers */}
-      <div className="mt-8 border-t border-slate-800 pt-6">
-        <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
-          All Raw HTTP Headers Received ({Object.keys(headers.headers).length})
-        </h4>
-        <div className="bg-[#090f1d] border border-slate-800 rounded-2xl overflow-hidden">
-          <table className="w-full text-left text-xs font-mono">
-            <thead>
-              <tr className="border-b border-slate-800 text-slate-500">
-                <th className="py-2.5 px-4">Header</th>
-                <th className="py-2.5 px-4">Value</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800/60">
-              {Object.entries(headers.headers).map(([k, v]) => (
-                <tr key={k} className="hover:bg-slate-800/30">
-                  <td className="py-2.5 px-4 text-emerald-400 font-semibold w-1/3">{k}</td>
-                  <td className="py-2.5 px-4 text-slate-300 break-all">{v}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {/* Raw HTTP Response Headers */}
+      <div className="border border-[#222222] bg-black">
+        <div className="p-2.5 bg-[#0c0c0c] border-b border-[#222222] text-[#777777] uppercase text-[10px] font-semibold">
+          Raw Target Response Headers ({Object.keys(headers.headers).length})
+        </div>
+        <div className="p-3 max-h-72 overflow-y-auto space-y-1 text-[11px]">
+          {Object.entries(headers.headers).map(([k, v]) => (
+            <div key={k} className="flex flex-col sm:flex-row sm:items-start py-0.5 border-b border-[#141414]">
+              <span className="text-[#00ff66] font-bold sm:w-1/3 truncate shrink-0">{k}:</span>
+              <span className="text-[#aaaaaa] break-all">{v}</span>
+            </div>
+          ))}
         </div>
       </div>
     </div>

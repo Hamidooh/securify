@@ -1,7 +1,6 @@
 import React from 'react';
 import { ScanHistoryItem } from '../types';
-import { X, Trash2, ArrowRight, ShieldCheck, History } from 'lucide-react';
-import { getGradeBadge } from '../utils/scoreCalculator';
+import { X, Trash2, ArrowRight } from 'lucide-react';
 
 interface HistoryDrawerProps {
   isOpen: boolean;
@@ -21,73 +20,69 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex justify-end">
-      <div className="w-full max-w-md bg-[#0d1424] border-l border-slate-800 h-full flex flex-col shadow-2xl animate-in slide-in-from-right duration-200">
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex justify-end font-mono">
+      <div className="w-full max-w-md bg-black border-l border-[#222222] h-full flex flex-col shadow-2xl">
         {/* Drawer Header */}
-        <div className="p-5 border-b border-slate-800 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <History className="w-5 h-5 text-emerald-400" />
-            <h3 className="text-sm font-bold text-white tracking-wide">Recent Audit History</h3>
+        <div className="p-4 border-b border-[#222222] bg-[#080808] flex items-center justify-between">
+          <div className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+            <span className="text-[#00ff66]">&gt;</span> Audit Log History
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition"
+            className="p-1 border border-[#333333] hover:border-[#666666] text-[#888888] hover:text-white transition"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* List */}
-        <div className="flex-1 p-5 overflow-y-auto space-y-2.5">
+        <div className="flex-1 p-4 overflow-y-auto space-y-2 text-xs">
           {history.length === 0 ? (
-            <div className="p-10 text-center text-slate-500 text-xs">
-              No previous audit history recorded. Run a scan to see it logged here!
+            <div className="p-8 text-center text-[#555555] text-xs">
+              [No previous scan records in cache]
             </div>
           ) : (
-            history.map((item) => {
-              const gradeStyle = getGradeBadge(item.grade);
-
-              return (
-                <div
-                  key={item.id}
-                  onClick={() => {
-                    onSelectTarget(item.target);
-                    onClose();
-                  }}
-                  className="p-3 bg-[#090f1d] border border-slate-800 rounded-xl flex items-center justify-between cursor-pointer hover:border-slate-700 hover:bg-slate-900 transition group"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className={`w-9 h-9 rounded-lg font-mono font-bold text-sm flex items-center justify-center border ${gradeStyle.bg} ${gradeStyle.text} ${gradeStyle.border}`}>
-                      {item.grade}
+            history.map((item) => (
+              <div
+                key={item.id}
+                onClick={() => {
+                  onSelectTarget(item.target);
+                  onClose();
+                }}
+                className="p-3 bg-[#0a0a0a] border border-[#222222] hover:border-[#00ff66] cursor-pointer transition flex items-center justify-between group"
+              >
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-white font-bold group-hover:text-[#00ff66] transition">
+                      {item.target}
                     </span>
-                    <div>
-                      <h4 className="text-xs font-bold text-white font-mono group-hover:text-emerald-400 transition truncate max-w-[180px]">
-                        {item.target}
-                      </h4>
-                      <span className="text-[10px] text-slate-500 font-mono">
-                        {new Date(item.timestamp).toLocaleDateString()} • {item.score}/100
-                      </span>
-                    </div>
+                    <span className="text-[#00ff66] font-bold text-[10px]">
+                      [Grade {item.grade}]
+                    </span>
                   </div>
-
-                  <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-emerald-400 transition" />
+                  <span className="text-[10px] text-[#666666]">
+                    {new Date(item.timestamp).toLocaleDateString()} • {item.score}/100 pts
+                  </span>
                 </div>
-              );
-            })
+
+                <span className="text-[#555555] group-hover:text-[#00ff66] text-xs transition">
+                  [Re-scan] →
+                </span>
+              </div>
+            ))
           )}
         </div>
 
         {/* Footer */}
         {history.length > 0 && (
-          <div className="p-4 border-t border-slate-800 flex justify-between items-center bg-slate-950/40">
+          <div className="p-3 border-t border-[#222222] bg-[#080808] flex justify-between items-center text-xs">
             <button
               onClick={onClearHistory}
-              className="flex items-center gap-1.5 text-xs text-rose-400 hover:text-rose-300 transition"
+              className="text-[#ff5566] hover:text-[#ff2233] transition"
             >
-              <Trash2 className="w-3.5 h-3.5" />
-              <span>Clear History</span>
+              [Clear History]
             </button>
-            <span className="text-[11px] text-slate-500 font-mono">{history.length} scans</span>
+            <span className="text-[#666666] text-[11px]">{history.length} audit logs</span>
           </div>
         )}
       </div>
