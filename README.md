@@ -12,6 +12,19 @@
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)](Dockerfile)
 [![CI Pipeline](https://img.shields.io/badge/CI-Passing-00ff66?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/Hamidooh/securify/actions)
 
+
+<p align="center">
+  <a href="https://github.com/Hamidooh/securify/fork">
+    <img src="https://img.shields.io/badge/🍴_FORK_REPO-00ffff?style=for-the-badge&logo=github&logoColor=black&labelColor=000000" width="300"/>
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Hamidooh/securify">
+    <img src="https://img.shields.io/badge/⭐_STAR_REPO-8a2be2?style=for-the-badge&logo=github&logoColor=white&labelColor=000000" width="300"/>
+  </a>
+</p>
+
 <p align="center">
   <strong>An enterprise-grade, high-speed security intelligence engine and interactive developer dashboard.</strong><br>
   Analyze live SSL/TLS certificate chains, grade HTTP security headers, diagnose DNS email spoofing defenses (SPF/DMARC), probe exposed database ports, and generate automated server hardening configurations in seconds.
