@@ -13,6 +13,29 @@ const distPath = path.join(__dirname, '../dist');
 const app = express();
 const PORT = process.env.PORT || 3002;
 
+// 1. Suppress X-Powered-By technology leakage
+app.disable('x-powered-by');
+
+// 2. Comprehensive Enterprise Security Headers
+app.use((req, res, next) => {
+  // Anti-Clickjacking
+  res.setHeader('X-Frame-Options', 'DENY');
+  // Prevent MIME-type Sniffing
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  // HTTP Strict Transport Security (HSTS)
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  // Cross-Origin Referrer Protection
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  // Restrict Invasive Device APIs
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), browsing-topics=()');
+  // Robust Content Security Policy (allows app resources & font assets)
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' https:; frame-ancestors 'none';"
+  );
+  next();
+});
+
 app.use(cors());
 app.use(express.json());
 
@@ -372,6 +395,35 @@ async function checkDns(hostname) {
       dnsResult.hasDmarc = true;
     }
   } catch {}
+
+  // Subdomain apex domain fallback for SPF & DMARC
+  const parts = hostname.split('.');
+  if ((!dnsResult.hasSpf || !dnsResult.hasDmarc) && parts.length > 2) {
+    const apex = parts.slice(-2).join('.');
+    try {
+      if (!dnsResult.hasSpf) {
+        const apexTxts = await dns.resolveTxt(apex).catch(() => []);
+        const flatTxt = apexTxts.map(t => t.join(''));
+        const apexSpf = flatTxt.find(t => t.startsWith('v=spf1'));
+        if (apexSpf) {
+          dnsResult.spfRecord = `${apexSpf} (delegated from ${apex})`;
+          dnsResult.hasSpf = true;
+        }
+      }
+    } catch {}
+
+    try {
+      if (!dnsResult.hasDmarc) {
+        const apexDmarcTxts = await dns.resolveTxt(`_dmarc.${apex}`).catch(() => []);
+        const flatDmarc = apexDmarcTxts.map(t => t.join(''));
+        const apexDmarc = flatDmarc.find(t => t.startsWith('v=DMARC1'));
+        if (apexDmarc) {
+          dnsResult.dmarcRecord = `${apexDmarc} (delegated from ${apex})`;
+          dnsResult.hasDmarc = true;
+        }
+      }
+    } catch {}
+  }
 
   return dnsResult;
 }
